@@ -1,5 +1,6 @@
 #!/bin/bash
 cd /var/www/newww
+rm -rf /var/www/newww/node_modules
 npm install marky-markdown
 cd node_modules; mkdir @soldair; mv marky-markdown/ \@soldair/
 cd /var/www/newww/
@@ -14,7 +15,7 @@ cp /var/www/newww/env.example /var/www/newww/.env.example
 cd /tmp
 rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-6.rpm
-yum --enablerepo=remi,remi-test install redis 
+yum --enablerepo=remi,remi-test install -y redis 
 /etc/init.d/redis start
 npm install forever -g
 npm install -g gulp
