@@ -1,3 +1,4 @@
 #!/bin/bash
-runuser -l deployer -c 'forever start /var/www/newww/server.js'
+NODE_ENV='dev gulp dev'
+runuser -l deployer -c 'cd /var/www/newww; npm run dev &'
 
