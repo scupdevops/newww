@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf /var/www/newww/*
 useradd deployer
 chown -R deployer:deployer /var/www/newww/
 sed -i "/HOSTNAME=localhost.localdomain/c\HOSTNAME=app-$(echo $RANDOM)" /etc/sysconfig/network
