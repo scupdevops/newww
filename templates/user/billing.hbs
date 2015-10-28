@@ -1,0 +1,161 @@
+{{> profile-secondary-nav}}
+
+<div class="container{{#unless features.org_billing}} narrow{{/unless}}">
+
+  <hgroup>
+    {{#if features.org_billing}}
+      <h1>Subscriptions</h1>
+    {{else}}
+      {{#if customer}}
+      <h1>your billing info</h1>
+      {{else}}
+      <h1>sign up for private modules</h1>
+      {{/if}}
+    {{/if}}
+  </hgroup>
+
+  {{> email-verify-nag}}
+
+  {{#if canceled}}
+    <p class="notice cancellation-notice">
+      You have successfully cancelled your private npm subscription. Your free account
+      still exists, as do any private modules that you created. Your private modules
+      are still accessible to any other paid users you've shared them with. If you decide
+      to start paying again, those modules will be waiting for you.
+    </p>
+  {{/if}}
+
+  {{#if updated}}
+    {{> twitter-tracking pid='l5xyy'}}
+
+    <p class="notice update-notice">
+      You have successfully updated your billing information.
+      <br/><br/>
+      Please run `npm login` on the command line (even if you are already logged in) to get all the benefits of private npm!
+    </p>
+  {{else}}
+    {{> twitter-tracking pid='l5xz2'}}
+  {{/if}}
+
+  {{#if package}}
+    <p class="notice payment-required-notice">
+      Someone added you as a collaborator on the <a href="/package/{{package}}">{{package}}</a> package,
+      but you'll need to sign up as a paying user before you can access the package.
+    </p>
+  {{/if}}
+
+  {{#if customer.license_expired }}
+    <p class="error license-expired">
+      Your license has expired, and your account
+      status is <strong>{{customer.status}}</strong>.
+      Any private packages you've created still exist, but you
+      will not be able to access them until your license is renewed.
+    </p>
+  {{/if}}
+
+  {{#if features.org_billing}}
+  <div class="tabs">
+
+    <div class="tab-nav-container">
+      <div class="nav-container nav-2-container">
+        <ul class="nav nav-2 clear" role="navigation">
+          <li class="current"><a href="#overview">Overview</a></li>
+          {{#if customer}}
+          <li><a href="#payment-information">Payment Information</a></li>
+          {{else}}
+          <li><a href="#payment-information">Sign up for private modules</a></li>
+          {{/if}}
+          {{#if customer.customer_id}}
+          <li><button type="button" id="billing" data-stripe-id="{{customer.customer_id}}">Payment History</button></li>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+
+    <div id="overview" class="tab tab-1">
+      {{#if privateModules}}
+      <table class="subscriptions">
+        <thead>
+          <tr>
+            <th>Personal Plan</th>
+            <th>Next Billing Date</th>
+            <th>Monthly Fee</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each privateModules}}
+          <tr>
+            <td>Private Modules Plan <span>This plan is paid by you.</span></td>
+            <td data-date="{{next_billing_date}}" data-date-format="%B %e %Y">
+              {{next_billing_date}}
+            </td>
+            <td>{{cost}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{/if}}
+      {{#if orgs}}
+      <table class="subscriptions">
+        <thead>
+          <tr>
+            <th>Organizations</th>
+            <th>Paid Users</th>
+            <th>Next Billing Date</th>
+            <th>Monthly Fee</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each orgs}}
+            <tr>
+              <td><a href="/org/{{npm_org}}">{{npm_org}}</href></td>
+              <td>{{quantity}}</td>
+              {{#if cancel_at_period_end}}
+              <td>--</td>
+              {{else}}
+              <td data-date="{{next_billing_date}}" data-date-format="%B %e %Y">
+                {{next_billing_date}}
+              </td>
+              {{/if}}
+              <td>{{cost}}</td>
+              {{#if cancel_at_period_end}}
+              <td data-date="{{next_billing_date}}" data-date-format="%B %e %Y">
+                Last date - {{next_billing_date}}
+              </td>
+              {{else}}
+              <td>
+                <form method="POST" id="org-delete-{{@index}}" action="/org/{{npm_org}}">
+                  {{#with ../../this}}
+                  {{> form_security }}
+                  {{/with}}
+                    <input type="hidden" name="updateType" value="deleteOrg" />
+                    <button type="submit" class="icon-x"><span class="a11y-only">Delete Org {{npm_org}}</span></button>
+                </form>
+              </td>
+              {{/if}}
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{else}}
+      <p>You do not have any subscriptions</p>
+      {{/if}}
+    </div><!--/.tab-1-->
+
+    <div id="payment-information" class="tab tab-2">
+      {{> billing-info}}
+    </div><!--/.tab-2-->
+  </div><!--/.tabs-->
+  {{else}}
+    <div class="container narrow">
+      {{> billing-info}}
+    </div>
+    {{/if}}
+
+
+
+</div>
+
+<script src="https://js.stripe.com/v2/"></script>
+<script src="https://static.accountdock.com/app.min.js"></script>
