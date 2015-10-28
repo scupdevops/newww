@@ -11,9 +11,3 @@ yum install -y nodejs puppet
 npm install forever -g
 npm install -g gulp
 echo "* * * * * root puppet agent --test --server puppetmaster.scup.com" >> /etc/cron.d/puppet
-cd /tmp
-wget http://download.redis.io/releases/redis-3.0.5.tar.gz
-tar xzf redis-3.0.5.tar.gz
-cd redis-3.0.5
-make
-./src/redis-server &
