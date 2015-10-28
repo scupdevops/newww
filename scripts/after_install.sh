@@ -29,4 +29,5 @@ npm install tildify
 npm install interpret
 npm install v8flags
 npm install gulp
+npm install imagemin-pngcrush
 chown -R deployer:deployer /var/www/newww
