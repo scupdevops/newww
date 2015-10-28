@@ -1,4 +1,5 @@
 #!/bin/bash
+sleep 60
 ps aux | grep node | grep -v grep
         if [ $? -eq 0 ]
             then
