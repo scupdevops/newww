@@ -1,5 +1,5 @@
 #!/bin/bash
-ps aux | grep server.js | grep -v grep
+ps aux | grep node | grep -v grep
         if [ $? -eq 0 ]
             then
                 echo "O newww esta rodando"
