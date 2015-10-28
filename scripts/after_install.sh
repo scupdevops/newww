@@ -12,11 +12,9 @@ sed -i "/app_name: \['My Application'\],/c\app_name: \['newww'\]," newrelic.js
 cp /var/www/newww/env /var/www/newww/.env
 cp /var/www/newww/env.example /var/www/newww/.env.example
 cd /tmp
-wget http://download.redis.io/releases/redis-3.0.5.tar.gz
-tar xzf redis-3.0.5.tar.gz
-cd redis-3.0.5
-make -j 9
-./src/redis-server &
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-6.rpm
+yum --enablerepo=remi,remi-test install redis 
 npm install forever -g
 npm install -g gulp
 npm install gulp-util
